@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">禁用开屏广告摇一摇</string>
-    <string name="gitText">点击前往git开源地址</string>
+    <string name="gitText">点击前往开源地址</string>
 </resources>

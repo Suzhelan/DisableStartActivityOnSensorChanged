@@ -14,6 +14,31 @@ public class InitInject implements IXposedHookLoadPackage,
         IXposedHookInitPackageResources {
     private static final AtomicBoolean Initialized = new AtomicBoolean();
     private static XC_LoadPackage.LoadPackageParam mLoadPackageParam;
+
+    //初始化开始hook 本类其他方法暂时无意义
+    @Override
+    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam loadPackageParam) {
+        mLoadPackageParam = loadPackageParam;
+        String packageName = loadPackageParam.packageName;
+        if (!loadPackageParam.isFirstApplication) return;//通用的注入可能不需要这样的判断方式
+        if (!packageName.matches(HookEnv.HostPackageName)) return;
+
+        HookEnv.setCurrentHostAppPackageName(packageName);
+
+        XposedHelpers.findAndHookMethod(Application.class, "attach", Context.class, new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) {
+                if (Initialized.getAndSet(true)) return;
+                HookEnv.setHostAppContext((Context) param.args[0]);
+                ClassUtils.setHostClassLoader(HookEnv.getHostAppContext().getClassLoader());
+                if (ClassUtils.getHostLoader() == null) {
+                    XposedBridge.log("[禁用开屏广告摇一摇]Context=null");
+                }
+                HookInit.loadHook();
+            }
+        });
+    }
+
     private static StartupParam mStartupParam;
     private static XC_InitPackageResources.InitPackageResourcesParam mInitPackageResourcesParam;
 
@@ -29,34 +54,14 @@ public class InitInject implements IXposedHookLoadPackage,
         return mInitPackageResourcesParam;
     }
 
-    //初始化开始hook
-    @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam loadPackageParam) {
-        mLoadPackageParam = loadPackageParam;
-        String packageName = loadPackageParam.packageName;
-        if (!loadPackageParam.isFirstApplication) return;//通用的注入可能不需要这样的判断方式
-        if (!packageName.matches(HookEnv.HostPackageName)) return;
-        //防止重复挂钩命中
-        if (Initialized.getAndSet(true)) return;
-
-        HookEnv.setCurrentHostAppPackageName(packageName);
-        XposedHelpers.findAndHookMethod(Application.class, "attach", Context.class, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) {
-                //获取类加载器和全局的上下文
-                HookEnv.setHostAppContext((Context) param.args[0]);
-                ClassUtils.setHostClassLoader(HookEnv.getHostAppContext().getClassLoader());
-                //加载hook
-                HookInit.loadHook();
-            }
-        });
-    }
-
     @Override
     public void initZygote(StartupParam startupParam) {
         mStartupParam = startupParam;
     }
 
+    /**
+     * 实现此接口可以用于添加替换res
+     */
     @Override
     public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam initPackageResourcesParam) {
         mInitPackageResourcesParam = initPackageResourcesParam;

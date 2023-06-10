@@ -5,6 +5,7 @@ import android.hardware.SensorEventListener;
 import android.os.CountDownTimer;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
+import lin.xposed.ReflectUtils.ClassUtils;
 import lin.xposed.ReflectUtils.MethodUtils;
 import lin.xposed.ReflectUtils.PostMain;
 import lin.xposed.hook.util.XPBridge;
@@ -45,6 +46,8 @@ public class HookSensorEventListener {
             protected void afterHookedMethod(MethodHookParam param) {
                 Class<?> clz = (Class<?>) param.getResult();
                 if (clz == null) return;
+                //排除常用类提高性能
+                if (ClassUtils.isCommonClass(clz.getName())) return;
                 //获取类实现的接口列表 因为没法直接hook接口的抽象方法
                 Class<?>[] interfacesList = clz.getInterfaces();
                 if (interfacesList != null) {
