@@ -32,7 +32,7 @@ public class InitInject implements IXposedHookLoadPackage,
                 HookEnv.setHostAppContext((Context) param.args[0]);
                 ClassUtils.setHostClassLoader(HookEnv.getHostAppContext().getClassLoader());
                 if (ClassUtils.getHostLoader() == null) {
-                    XposedBridge.log("[禁用开屏广告摇一摇]Context=null");
+                    XposedBridge.log("[禁用启动页广告摇一摇]Context=null");
                 }
                 HookInit.loadHook();
             }
