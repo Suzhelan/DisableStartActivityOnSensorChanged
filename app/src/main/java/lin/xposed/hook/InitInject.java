@@ -25,15 +25,16 @@ public class InitInject implements IXposedHookLoadPackage,
 
         HookEnv.setCurrentHostAppPackageName(packageName);
 
+        /*不考虑出现锁同步对象空的情况*/
         XposedHelpers.findAndHookMethod(Application.class, "attach", Context.class, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
                 if (Initialized.getAndSet(true)) return;
+                //获取和设置全局上下文和类加载器
                 HookEnv.setHostAppContext((Context) param.args[0]);
                 ClassUtils.setHostClassLoader(HookEnv.getHostAppContext().getClassLoader());
-                if (ClassUtils.getHostLoader() == null) {
-                    XposedBridge.log("[禁用启动页广告摇一摇]Context=null");
-                }
+
+                //加载hook
                 HookInit.loadHook();
             }
         });

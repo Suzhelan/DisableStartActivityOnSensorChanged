@@ -36,6 +36,7 @@ public class HookSensorEventListener {
     };
 
     public void startHook() {
+
         countDownTimer.start();
 
         Method allClassMethod = MethodUtils.findMethod(ClassLoader.class, "loadClass", Class.class, new Class[]{String.class});
