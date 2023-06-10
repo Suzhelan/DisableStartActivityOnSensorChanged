@@ -12,18 +12,19 @@ public class HookEnv {
 
     private static Context hostAppContext;
 
+    public static String getCurrentHostAppPackageName() {
+        return currentHostAppPackageName;
+    }
+
     public static void setCurrentHostAppPackageName(String currentHostAppPackageName) {
         HookEnv.currentHostAppPackageName = currentHostAppPackageName;
     }
 
-    public static void setHostAppContext(Context hostAppContext) {
-        HookEnv.hostAppContext = hostAppContext;
-    }
-
-    public static String getCurrentHostAppPackageName() {
-        return currentHostAppPackageName;
-    }
     public static Context getHostAppContext() {
         return hostAppContext;
+    }
+
+    public static void setHostAppContext(Context hostAppContext) {
+        HookEnv.hostAppContext = hostAppContext;
     }
 }

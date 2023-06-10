@@ -56,7 +56,7 @@ public class FieIdUtils {
     /**
      * 查找并获取静态字段
      */
-    public static <T> T getStaticFieId(Class<?> findClass, String findName)throws Exception {
+    public static <T> T getStaticFieId(Class<?> findClass, String findName) throws Exception {
         Field field = findUnknownTypeField(findClass, findName);
         return (T) field.get(null);
     }
@@ -64,10 +64,11 @@ public class FieIdUtils {
     /**
      * 查找并获取静态字段
      */
-    public static <T> T getStaticFieId(Class<?> findClass, String findName,Class<?> fieldType)throws Exception {
-        Field field = findField(findClass, findName,fieldType);
+    public static <T> T getStaticFieId(Class<?> findClass, String findName, Class<?> fieldType) throws Exception {
+        Field field = findField(findClass, findName, fieldType);
         return (T) field.get(null);
     }
+
     /**
      * 获取未知类型但有字段名的字段
      */
@@ -82,7 +83,7 @@ public class FieIdUtils {
                 if (f.getName().equals(fieldName)) {
                     f.setAccessible(true);
                     FIELD_CACHE.put(key, f);
-                    return  f;
+                    return f;
                 }
             }
             Check = Check.getSuperclass();

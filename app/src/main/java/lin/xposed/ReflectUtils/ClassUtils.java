@@ -8,9 +8,8 @@ import java.util.*;
 
 public class ClassUtils {
     private static final Map<String, Class<?>> classMap = new HashMap<>();
-
-    private static ClassLoader hostLoader;//宿主类加载器
     public static ClassLoader moduleLoader;//模块类加载器
+    private static ClassLoader hostLoader;//宿主类加载器
 
     public static boolean isConflictingClass(String name) {
         return name.startsWith("androidx.") || name.startsWith("android.") ||
@@ -62,7 +61,8 @@ public class ClassUtils {
 
     /**
      * 获取实现了此接口的所有类
-     * @param apkPath 位于/data/app/的base.apk路径
+     *
+     * @param apkPath        位于/data/app/的base.apk路径
      * @param interfaceClass 接口类
      */
     public static List<Class<?>> getAllClassByInterface(String apkPath, Class<?> interfaceClass) {
@@ -110,19 +110,16 @@ public class ClassUtils {
         while (enumeration.hasMoreElements()) {//遍历
             String className = enumeration.nextElement();
             //是packageName的包 非常用包
-            if (className.startsWith(packageName) && ! isConflictingClass(className)) {
+            if (className.startsWith(packageName) && !isConflictingClass(className)) {
                 classes.add(className);
             }
         }
         df.close();
         return classes;
     }
+
     public static void setHostClassLoader(ClassLoader loader) {
         hostLoader = loader;
-    }
-
-    public static void setModuleLoader(ClassLoader loader) {
-        moduleLoader = loader;
     }
 
     public static ClassLoader getHostLoader() {
@@ -131,5 +128,9 @@ public class ClassUtils {
 
     public static ClassLoader getModuleLoader() {
         return moduleLoader;
+    }
+
+    public static void setModuleLoader(ClassLoader loader) {
+        moduleLoader = loader;
     }
 }
