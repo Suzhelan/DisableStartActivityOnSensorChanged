@@ -1,4 +1,4 @@
-package lin.xposed.main;
+package lin.xposed.hook;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

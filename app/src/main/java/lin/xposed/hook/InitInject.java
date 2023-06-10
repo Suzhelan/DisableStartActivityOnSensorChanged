@@ -6,7 +6,6 @@ import de.robv.android.xposed.*;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import lin.xposed.ReflectUtils.ClassUtils;
-import lin.xposed.main.HookEnv;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
