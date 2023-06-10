@@ -1,6 +1,6 @@
 
 <div align="center">
-    <h1 > 禁用启动页摇一摇 </h1>
+    <h1 > 禁用应用启动页摇一摇 </h1>
 
 [![Telegram](https://img.shields.io/static/v1?label=Telegram&message=Channel&color=0088cc)](https://t.me/WhenFlowersAreInBloom)
 </div>
